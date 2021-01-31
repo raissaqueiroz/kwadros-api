@@ -29,6 +29,12 @@ class App {
 
 		const allowedOrigins = [
 			'http://localhost:3000',
+			'http://app.kwadros.com',
+			'https://app.kwadros.com',
+			'https://www.kwadros.com',
+			'http://www.kwadros.com',
+			'https://kwadros.com',
+			'http://kwadros.com',
 		];
 
 		this.server.use(
