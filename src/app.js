@@ -13,7 +13,7 @@ class App {
 	constructor() {
 		this.server = express();
 
-		// database.createConnection();
+		database.createConnection();
 
 		this.middlewares();
 		this.routes();
@@ -61,6 +61,8 @@ class App {
 		this.server.use(routes.Session);
 		this.server.use(routes.User);
 		this.server.use(routes.Yampi);
+		this.server.use(routes.Payment);
+		this.server.use(routes.Upload);
 	}
 }
 

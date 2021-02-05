@@ -27,5 +27,7 @@ module.exports = {
 		'no-trailing-spaces': ['off', { ignoreComments: 'on' }],
 		'consistent-return': ['error', { treatUndefinedAsUnspecified: true }],
 		'object-shorthand': 'off',
+		'no-dupe-keys': 'off',
+		'array-callback-return': ['off', { checkForEach: true }],
 	},
 };
