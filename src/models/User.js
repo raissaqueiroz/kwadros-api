@@ -5,10 +5,6 @@ require('dotenv').config();
 
 const UserSchema = new Schema(
 	{
-		name: {
-			type: String,
-			required: true,
-		},
 		email: {
 			type: String,
 			required: true,
@@ -19,16 +15,6 @@ const UserSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		status: {
-			type: Boolean,
-			required: true,
-			default: true,
-		},
-		level_id: {
-			type: Schema.Types.ObjectId,
-			ref: 'Level',
-			default: '5ff0dce64c11e85f00dfd771'
-		}
 	},
 	{ timestamps: true }
 );

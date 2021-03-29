@@ -24,86 +24,26 @@ class SessionController {
 			});
 
 		try {
+			const response = await User.findOne({ email });
+
+			if (!response)
+				return res
+					.status(401)
+					.json({ error: 'E-mail não encontrado.' });
+
 			if (!(await bcrypt.compare(password, response.password_hash)))
 				return res.status(401).json({ error: 'Senha incorreta.' });
 
-
-
 			// Dados do Usuário
-			const { _id: id, name, email } = response;
-
-
+			const { _id: id } = response;
 
 			return res.json({
 				id,
-				name,
 				email,
-				token: jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' }),
+				token: jwt.sign({ id, email }, process.env.JWT_SECRET, {
+					expiresIn: '7d',
+				}),
 			});
-		} catch (err) {
-			return res.status(400).json({ error: err.message });
-		}
-	}
-
-	async profile(req, res) {
-		try {
-			const { _id: id, name, email, } = await User.findOne({ _id: req.user_id, ...req.query});
-
-			return res.json({id, name, email });
-
-		} catch (err) {
-			return res.status(400).json({ error: err.message });
-		}
-	}
-
-	// ENDPONT DESATUALIZADO
-	async update(req, res) {
-		const schema = Yup.object().shape({
-			name: Yup.string(),
-			email: Yup.string().email(),
-			password: Yup.string().min(6),
-			password_confirm: Yup.string().when('password', (password, field) =>
-				password ? field.required().oneOf([Yup.ref('password')]) : field
-			),
-		});
-
-		if (!(await schema.isValid(req.body)))
-			return res.status(400).json({
-				error:
-					'Falha na validação. O corpo da requisição não está correto.',
-			});
-
-		try {
-
-			// Validando se esse e-mail não pertence a outro usuário
-			if (req.body.email) {
-				const userExists = await User.findOne({
-					email: req.body.email,
-				});
-
-				if (userExists && String(userExists._id) !== req.user_id)
-					return res.status(400).json({
-						error: 'Esse e-mail já pertence a outro usuário.',
-					});
-			}
-
-			if (req.body.password_old){
-
-				const userResponse = User.findById(req.user_id);
-
-				if(!(await bcrypt.compare(password_old, userResponse.password_hash)))
-					return res.status(401).json({ error: 'Senha incorreta. ' });
-			}
-
-			const body = (req.body.password) ? { ...req.body, password_hash: req.body.password } : req.body;
-
-			const response = await User.findOneAndUpdate(
-				{ _id: req.user_id },
-				body,
-				{ new: true }
-			);
-
-			return res.json(response);
 		} catch (err) {
 			return res.status(400).json({ error: err.message });
 		}

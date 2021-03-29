@@ -49,6 +49,7 @@ class PaymentController {
 		}
 	}
 
+	// CARTÃO DE CRÉDITO -> Integração com Pagarme
 	async card(req, res) {
 		const { address, customer, card_hash, items, amount } = req.body;
 
